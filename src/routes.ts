@@ -1,10 +1,9 @@
 import { Router, Request, Response } from "express";
+import CreateUserController from "./controller/user/CreateUserController";
 
 const router = Router();
 
-router.get("/teste", (req: Request, res: Response) => {
-  res.json({ ok: true });
-  return;
-});
+// ROTAS USER
+router.post('/users', new CreateUserController().handle)
 
 export { router };
