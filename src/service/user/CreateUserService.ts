@@ -43,3 +43,5 @@ class CreateUserService {
 }
 
 export default CreateUserService;
+// 045 - BarberPRO - Sistema barbearia
+// 008 - Fazendo login do usuário
