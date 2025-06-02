@@ -15,8 +15,14 @@ class UserDetailService {
         email: true,
         address: true,
         service: true,
-        subscriptions: true,
         created_at: true,
+        subscriptions:{
+          select:{
+            id:true,
+            priceId:true,
+            status: true
+          }
+        }
       },
     });
 
