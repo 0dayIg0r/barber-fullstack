@@ -4,10 +4,12 @@ import { AuthUserController } from "./controller/user/AuthUserController";
 import { UserDetailController } from "./controller/user/DetailUserController";
 
 import { isAuthenticated } from "./middlewares/isAuthenticated";
+import { UpdateUserController } from "./controller/user/UpdateUserController";
 const router = Router();
 
 // ROTAS USER
 router.post('/users', new CreateUserController().handle)
 router.post('/session', new AuthUserController().handle)
 router.get('/me', isAuthenticated, new UserDetailController().handle)
+router.put('/users', isAuthenticated, new UpdateUserController().handle)
 export { router };
