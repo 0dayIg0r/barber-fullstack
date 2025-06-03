@@ -6,6 +6,7 @@ import { UserDetailController } from "./controller/user/DetailUserController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
 import { UpdateUserController } from "./controller/user/UpdateUserController";
 import { CreateHaircutController } from "./controller/haircut/CreateHairCutController";
+import { ListHaircutController } from "./controller/haircut/ListHaircutsController";
 const router = Router();
 
 // ROTAS USER
@@ -17,4 +18,5 @@ router.put('/users', isAuthenticated, new UpdateUserController().handle)
 
 //ROTAS CORTE DE CABELO
 router.post('/haircut', isAuthenticated, new CreateHaircutController().handle)
+router.get('/haircut', isAuthenticated, new ListHaircutController().handle)
 export { router };
