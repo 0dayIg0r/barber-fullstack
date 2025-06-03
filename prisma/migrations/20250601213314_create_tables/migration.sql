@@ -43,7 +43,7 @@ CREATE TABLE "services" (
     "customer" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "haircut_ìd" TEXT NOT NULL,
+    "haircut_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "services_pkey" PRIMARY KEY ("id")
