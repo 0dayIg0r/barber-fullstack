@@ -6,11 +6,11 @@ class ListScheduleController {
     const user_id = req.user_id;
     const listSchedule = new ListScheduleService();
 
-    const schedule = listSchedule.execute({
+    const schedule = await listSchedule.execute({
       user_id,
     });
 
-    res.status(200).send(schedule);
+    res.status(200).json(schedule);
     return;
   }
 }
