@@ -19,20 +19,17 @@ class CreateHaircutService {
     });
 
     const user = await prismaClient.user.findFirst({
-      where:{
-        id: user_id
+      where: {
+        id: user_id,
       },
-      include:{
-        subscriptions: true
-      }
-      
-    })
+      include: {
+        subscriptions: true,
+      },
+    });
 
-    if(myHaircuts >=3 && user?.subscriptions?.status !== 'active'){
-        throw new Error('Para mais cadastros, mude seu plano para o premium.')
+    if (myHaircuts >= 3 && user?.subscriptions?.status !== "active") {
+      throw new Error("Para mais cadastros, mude seu plano para o premium.");
     }
-
-    
 
     const haircut = await prismaClient.haircut.create({
       data: {

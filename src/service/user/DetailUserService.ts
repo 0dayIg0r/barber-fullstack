@@ -16,13 +16,13 @@ class UserDetailService {
         address: true,
         service: true,
         created_at: true,
-        subscriptions:{
-          select:{
-            id:true,
-            priceId:true,
-            status: true
-          }
-        }
+        subscriptions: {
+          select: {
+            id: true,
+            priceId: true,
+            status: true,
+          },
+        },
       },
     });
 

@@ -1,19 +1,18 @@
 import prismaClient from "../../prisma";
 
-interface CountRequest{
-    user_id: string
+interface CountRequest {
+  user_id: string;
 }
 
-class CountHairCutsService{
-    async execute({user_id}:CountRequest){
-        const count = await prismaClient.haircut.count({
-            where:{
-                id: user_id
-            }
-        })
-        return  count
-    }
-
+class CountHairCutsService {
+  async execute({ user_id }: CountRequest) {
+    const count = await prismaClient.haircut.count({
+      where: {
+        id: user_id,
+      },
+    });
+    return count;
+  }
 }
 
-export {CountHairCutsService}
+export { CountHairCutsService };

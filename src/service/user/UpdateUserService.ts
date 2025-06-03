@@ -1,9 +1,10 @@
-import prismaClient from '../../prisma'
+import prismaClient from "../../prisma";
+
 
 interface UpdateRequest {
-  user_id: string,
-  name: string,
-  address: string
+  user_id: string;
+  name: string;
+  address: string;
 }
 
 class UpdateUserService {
@@ -11,17 +12,17 @@ class UpdateUserService {
     try {
       const userAlreadyExists = await prismaClient.user.findFirst({
         where: {
-          id: user_id
-        }
-      })
+          id: user_id,
+        },
+      });
 
       if (!userAlreadyExists) {
-        throw new Error('Falha ao editar usuário')
+        throw new Error("Falha ao editar usuário");
       }
 
       const userUpdated = await prismaClient.user.update({
         where: {
-          id: user_id
+          id: user_id,
         },
         data: {
           name,
@@ -30,18 +31,15 @@ class UpdateUserService {
         select: {
           name: true,
           email: true,
-          address: true
-        }
-      })
+          address: true,
+        },
+      });
 
-      return userUpdated
-
+      return userUpdated;
     } catch (err) {
-      throw new Error('Falha ao atualizar os dados.')
+      throw new Error("Falha ao atualizar os dados.");
     }
   }
-
-
 }
 
-export { UpdateUserService }
+export { UpdateUserService };

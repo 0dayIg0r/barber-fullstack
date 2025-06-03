@@ -10,17 +10,17 @@ class CheckSubService {
       where: {
         id: user_id,
       },
-      select:{
-        subscriptions:{
-            select:{
-                id: true,
-                status: true
-            }
-        }
-      }
+      select: {
+        subscriptions: {
+          select: {
+            id: true,
+            status: true,
+          },
+        },
+      },
     });
 
-    return status
+    return status;
   }
 }
-export { CheckSubService}
+export { CheckSubService };

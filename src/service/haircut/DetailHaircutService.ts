@@ -1,6 +1,5 @@
 import prismaClient from "../../prisma";
 
-
 interface DetailRequest {
   haircut_id: string;
 }
