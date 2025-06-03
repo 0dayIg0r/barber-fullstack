@@ -8,14 +8,14 @@ class NewScheduleController {
 
     const newSchedule = new NewScheduleService();
 
-    const schedule = newSchedule.execute({
+    const schedule = await newSchedule.execute({
       user_id,
       haircut_id,
       customer,
     });
-    console.log(schedule);
 
     res.status(201).send(schedule);
+
   }
 }
 
