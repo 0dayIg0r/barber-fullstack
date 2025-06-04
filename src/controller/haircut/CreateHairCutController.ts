@@ -6,18 +6,24 @@ class CreateHaircutController {
     const { name, price } = req.body;
     const user_id = req.user_id;
 
+    if (!name || !price || !user_id) {
+      return res.status(400).json({ error:"Preencha os campos completamente, nome, preço e id de usuário" });
+    }
+
     const haircutService = new CreateHaircutService();
 
-    const haircut = await haircutService.execute({
-      name,
-      price,
-      user_id,
-    });
+    try {
+      const haircut = await haircutService.execute({
+        name,
+        price,
+        user_id,
+      });
+      return res.status(201).json(haircut);
+    } catch (error) {
 
-    res.status(201).send(haircut);
-
-    return;
+      return res.status(500).json({ error: "Internal server error." });
+    }
   }
 }
 
-export { CreateHaircutController}
+export { CreateHaircutController };
