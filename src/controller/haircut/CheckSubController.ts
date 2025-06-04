@@ -5,14 +5,19 @@ class CheckSubController {
   async handle(req: Request, res: Response) {
     const user_id = req.user_id;
 
+
+    if (!user_id) {
+      return res.status(400).json({ error: "É necessário um usuário" });
+    }
+
     const checkSub = new CheckSubService();
 
-    const status = await checkSub.execute({
-      user_id,
-    });
-
-    res.status(200).send(status);
-    return;
+    try {
+      const status = await checkSub.execute({ user_id });
+      return res.status(200).json(status);
+    } catch (error) {
+      return res.status(500).json({ error: "Internal server error." });
+    }
   }
 }
 
