@@ -16,7 +16,6 @@ app.use(router);
 
 // Middleware de tratamento de erros
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-
   res.status(400).json({
     error: err.message || "Internal Server Error",
   });
@@ -25,5 +24,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 const PORT = process.env.PORT || 3333;
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  `Servidor rodando na porta ${PORT}`;
 });

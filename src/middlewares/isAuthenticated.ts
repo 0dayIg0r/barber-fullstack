@@ -13,17 +13,18 @@ export function isAuthenticated(
   const authToken = req.headers.authorization;
 
   if (!authToken) {
-    res.status(401).end();
-    return;
+    return res.status(401).json({ error: "Token de autenticação não fornecido." });
   }
 
   const [, token] = authToken.split(" ");
+  
   try {
     const { sub } = verify(token, process.env.JWT_SECRET as string) as Payload;
-    req.user_id = sub
+    req.user_id = sub;
 
-    return next()
+    return next();
   } catch (err) {
-    res.status(401).end();
+  
+    return res.status(401).json({ error: "Token de autenticação inválido." });
   }
 }

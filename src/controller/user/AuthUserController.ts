@@ -5,15 +5,24 @@ class AuthUserController {
   async handle(req: Request, res: Response) {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email e senha são obrigatórios." });
+    }
+
     const authUserService = new AuthUserService();
 
-    const session = await authUserService.execute({
-      email,
-      password,
-    });
+    try {
+      const session = await authUserService.execute({
+        email,
+        password,
+      });
 
-    res.json(session);
-    return;
+      return res.status(200).json(session);
+    } catch (error) {
+      error;
+      return res.status(401).json({ error: "Email ou senha inválidos." });
+    }
   }
 }
+
 export { AuthUserController };
