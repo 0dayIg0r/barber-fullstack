@@ -9,7 +9,7 @@ interface NewScheduleRequest {
 class NewScheduleService {
   async execute({ user_id, haircut_id, customer }: NewScheduleRequest) {
     if (customer === "" || haircut_id === "") {
-      throw new Error("Não foi possível agendar o serviço");
+      throw new Error("Não foi possível agendar o serviço"); 
     }
 
     const userExists = await prismaClient.user.findUnique({
