@@ -6,18 +6,26 @@ class UpdateHaircutController {
     const user_id = req.user_id;
     const { name, price, status, haircut_id } = req.body;
 
+    // Validação dos dados
+    if (!user_id || !haircut_id) {
+      return res.status(400).json({ error: "O ID do usuário e o ID do corte de cabelo são obrigatórios." });
+    }
+
     const updateHaircut = new UpdateHairCutService();
 
-    const haircut = await updateHaircut.execute({
-      user_id,
-      name,
-      price,
-      status,
-      haircut_id,
-    });
-
-    res.status(200).send(haircut);
-    return;
+    try {
+      const haircut = await updateHaircut.execute({
+        user_id,
+        name,
+        price,
+        status,
+        haircut_id,
+      });
+      return res.status(200).json(haircut);
+    } catch (error) {
+  
+      return res.status(500).json({ error: "Erro interno do servidor." });
+    }
   }
 }
 
