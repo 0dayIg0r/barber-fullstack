@@ -12,6 +12,7 @@ import { CheckSubController } from "./controller/haircut/CheckSubController";
 import { DetailHaircutController } from "./controller/haircut/DetailHairCutController";
 import { NewScheduleController } from "./controller/schedule/NewScheduleController";
 import { ListScheduleController } from "./controller/schedule/ListScheduleController";
+import { FinishScheduleController } from "./controller/schedule/FinishScheduleController";
 const router = Router();
 
 // ROTAS USER
@@ -34,4 +35,6 @@ router.get(
 //ROTAS SERVIÇO
 router.post("/schedule", isAuthenticated, new NewScheduleController().handle);
 router.get("/schedule", isAuthenticated, new ListScheduleController().handle);
+router.delete("/schedule", isAuthenticated, new FinishScheduleController().handle);
+
 export { router };
