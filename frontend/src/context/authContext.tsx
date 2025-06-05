@@ -31,11 +31,13 @@ interface SignInProps {
   password: string;
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps )   {
   const [user, setUser] = useState<UserProps | null>(null);
   const isAuthenticated = !!user;
 
-  async function signIn({ email, password }: SignInProps) {}
+  async function signIn({ email, password }: SignInProps) {
+    console.log(email, password)
+  }
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn }}>
