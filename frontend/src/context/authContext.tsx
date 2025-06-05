@@ -1,36 +1,53 @@
-import { createContext, ReactNode, useState } from "react"
+import { createContext, ReactNode, useContext, useState } from "react";
 
-interface AuthContextData{
-    user: UserProps
-    isAuthenticated: boolean
+interface SubscriptionsProps {
+  id: string;
+  status: string;
 }
 
-interface SubscriptionsProps{
-    id: string,
-    status: string
+interface UserProps {
+  id: string;
+  name: string;
+  email: string;
+  address: string | null;
+  subscriptions?: SubscriptionsProps | null;
 }
 
-interface UserProps{
-    id: string
-    name: string
-    email: string
-    address: string | null
-    subscriptions?: SubscriptionsProps | null
+interface AuthContextData {
+  user: UserProps | null;
+  isAuthenticated: boolean;
+  setUser: (user: UserProps | null) => void;
+  signIn: (credentials: SignInProps) => Promise<void>;
 }
 
-type AuthProviderProps ={
-    children:ReactNode
+const AuthContext = createContext<AuthContextData | undefined>(undefined);
+
+interface AuthProviderProps {
+  children: ReactNode;
 }
 
-export const AuthContext = createContext({ } as AuthContextData)
+interface SignInProps {
+  email: string;
+  password: string;
+}
 
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<UserProps | null>(null);
+  const isAuthenticated = !!user;
 
-export function authProvider({children}:AuthProviderProps){
-    const [user, setUser] = useState<UserProps>()
-    const isAuthenticated   = !!user
-    return(
-        <AuthContext.Provider value={{user, isAuthenticated}}>
-            {children}
-        </AuthContext.Provider>
-    )
+  async function signIn({ email, password }: SignInProps) {}
+
+  return (
+    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth(): AuthContextData {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }
