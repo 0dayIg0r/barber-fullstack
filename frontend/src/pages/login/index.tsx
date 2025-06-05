@@ -36,7 +36,7 @@ export default function Login() {
             <Image
               src={logoImg}
               quality={100}
-              width={240}
+              width={300}
               objectFit="fill"
               alt="Logo barberpro"
             />
