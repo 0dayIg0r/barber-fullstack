@@ -4,8 +4,16 @@ import logoImg from "../../../public/images/logo.png";
 import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
 
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleLogin() {
+    console.log(email, password);
+  }
+
   return (
     <>
       <Head>
@@ -29,21 +37,25 @@ export default function Login() {
           </Center>
 
           <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             background="barber.400"
             size="lg"
             placeholder="email@email.com"
             type="email"
             mb={3}
-            color='#fff'
+            color="#fff"
           />
 
           <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             background="barber.400"
             size="lg"
             placeholder="********"
             type="password"
             mb={6}
-            color='#fff'
+            color="#fff"
           />
 
           <Button
@@ -52,13 +64,18 @@ export default function Login() {
             color="gray.900"
             size="lg"
             _hover={{ bg: "#ffb13e" }}
+            onClick={handleLogin}
           >
             Acessar
           </Button>
 
           <Center mt={2}>
             <Link href="/register">
-              <Text cursor="pointer" color='#fff' _hover={{color:'barber.100'}}>
+              <Text
+                cursor="pointer"
+                color="#fff"
+                _hover={{ color: "barber.100" }}
+              >
                 Ainda não possui conta? <strong>Cadastre-se</strong>
               </Text>
             </Link>

@@ -4,8 +4,16 @@ import logoImg from "../../../public/images/logo.png";
 import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
 
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  function handleRegister() {
+    
+  }
   return (
     <>
       <Head>
@@ -28,6 +36,8 @@ export default function Register() {
             />
           </Center>
           <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             background="barber.400"
             size="lg"
             placeholder="Qual nome da sua barbearia?"
@@ -36,6 +46,8 @@ export default function Register() {
             color="#fff"
           />
           <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             background="barber.400"
             size="lg"
             placeholder="email@email.com"
@@ -45,6 +57,8 @@ export default function Register() {
           />
 
           <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             background="barber.400"
             size="lg"
             placeholder="********"
@@ -60,6 +74,7 @@ export default function Register() {
             size="lg"
             _hover={{ bg: "#ffb13e" }}
             fontWeight="bold"
+            onClick={handleRegister}
           >
             Cadastrar
           </Button>
