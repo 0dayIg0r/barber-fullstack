@@ -1,7 +1,14 @@
 import Head from "next/head";
 import Image from "next/image";
 import logoImg from "../../../public/images/logo.png";
-import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Center,
+  Input,
+  Button,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -11,44 +18,54 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  function handleRegister() {
-    
-  }
+  function handleRegister() {}
+
   return (
     <>
       <Head>
         <title>BarberPRO - Faça seu registro para acessar</title>
       </Head>
+
       <Flex
-        background="barber.900"
-        height="100vh"
-        alignItems="center"
-        justifyContent="center"
+        bg="barber.900"
+        minH="100vh"
+        align="center"
+        justify="center"
+        px={4}
       >
-        <Flex width={640} direction="column" p={14} rounded={8}>
-          <Center p={4}>
+        <Flex
+          direction="column"
+          bg="barber.800"
+          w="100%"
+          maxW="500px"
+          p={{ base: 6, md: 14 }}
+          borderRadius={8}
+        >
+          <Center mb={6}>
             <Image
               src={logoImg}
               quality={100}
-               width={300}
-              objectFit="fill"
+              width={300}
+              objectFit="contain"
               alt="Logo barberpro"
             />
           </Center>
+
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            background="barber.400"
+            bg="barber.400"
             size="lg"
             placeholder="Qual nome da sua barbearia?"
             type="text"
             mb={3}
             color="#fff"
           />
+
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            background="barber.400"
+            bg="barber.400"
             size="lg"
             placeholder="email@email.com"
             type="email"
@@ -59,7 +76,7 @@ export default function Register() {
           <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            background="barber.400"
+            bg="barber.400"
             size="lg"
             placeholder="********"
             type="password"
@@ -68,7 +85,7 @@ export default function Register() {
           />
 
           <Button
-            background="buttons.cta"
+            bg="buttons.cta"
             mb={6}
             color="gray.900"
             size="lg"
@@ -79,16 +96,15 @@ export default function Register() {
             Cadastrar
           </Button>
 
-          <Center mt={2}>
-            <Link href="/register">
+          <Center>
+            <Link href="/login" passHref>
               <Text
+                as="a"
                 cursor="pointer"
                 color="#fff"
                 _hover={{ color: "barber.100" }}
               >
-                <Link href="/login">
-                  Já possui conta? <strong>Fazer login</strong>
-                </Link>
+                Já possui conta? <strong>Fazer login</strong>
               </Text>
             </Link>
           </Center>
