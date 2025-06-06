@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.tsx
 
-import { setCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../services/apiClient";
 import { navigateTo } from "./navigateTo";
@@ -23,6 +23,8 @@ interface AuthContextData {
   isAuthenticated: boolean;
   setUser: (user: UserProps | null) => void;
   signIn: (credentials: SignInProps) => Promise<void>;
+  signUp: (credentials: SignUpProps) => Promise<void>;
+  logoutUser: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -34,6 +36,11 @@ interface SignInProps {
   password: string;
 }
 
+interface SignUpProps {
+  name: string;
+  email: string;
+  password: string;
+}
 const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -69,8 +76,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log(e.message);
     }
   }
+
+  async function signUp({ name, email, password }: SignUpProps) {
+    try {
+      const res = await api.post("/users", {
+        name,
+        email,
+        password,
+      });
+
+      navigateTo("/login");
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
+  async function logoutUser() {
+    try {
+      destroyCookie(null, "@barber.token", {
+        path: "/",
+      });
+      navigateTo("/");
+      setUser(null);
+    } catch (e: any) {
+      throw new Error(e.message);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn, signUp, logoutUser }}>
       {children}
     </AuthContext.Provider>
   );
