@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/src/context/authContext";
 import { navigateTo } from "@/src/context/navigateTo";
+import { canSSRGuest } from "@/src/utils/canSSRGuest";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -117,3 +118,10 @@ export default function Register() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
+
