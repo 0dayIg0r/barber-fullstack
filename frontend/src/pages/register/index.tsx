@@ -1,24 +1,34 @@
 import Head from "next/head";
 import Image from "next/image";
 import logoImg from "../../../public/images/logo.png";
-import {
-  Flex,
-  Text,
-  Center,
-  Input,
-  Button,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
 
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/src/context/authContext";
+import { navigateTo } from "@/src/context/navigateTo";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  function handleRegister() {}
+  const { signUp } = useAuth();
+
+  async function handleRegister() {
+    if (name === "" && email === "" && password === "") {
+      return;
+    }
+
+    await signUp({
+      name,
+      email,
+      password,
+    });
+
+    navigateTo('/login')
+
+  }
 
   return (
     <>
@@ -26,13 +36,7 @@ export default function Register() {
         <title>BarberPRO - Faça seu registro para acessar</title>
       </Head>
 
-      <Flex
-        bg="barber.900"
-        minH="100vh"
-        align="center"
-        justify="center"
-        px={4}
-      >
+      <Flex bg="barber.900" minH="100vh" align="center" justify="center" px={4}>
         <Flex
           direction="column"
           bg="barber.800"
