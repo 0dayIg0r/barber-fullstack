@@ -1,8 +1,8 @@
 // src/contexts/AuthContext.tsx
 
-import { useRouter } from "next/router";
-import { destroyCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { api } from "../services/apiClient";
 
 interface SubscriptionsProps {
   id: string;
@@ -41,10 +41,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInProps) {
     console.log(email, password);
-    // lógica de login aqui
+    try {
+      const res = await api.post("/session", {
+        email,
+        password,
+      });
+      const { id, name, token, subscriptions, address } = res.data;
+
+      setCookie(undefined, "@barber.token", token, {
+        maxAge: 60 * 60 * 24 * 30,
+        path:'/'
+      });
+
+      setUser({
+        id,
+        name,
+        email,
+        address,
+        subscriptions,
+      })
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    } catch (e: any) {
+      throw new Error(e);
+    }
   }
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn, }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn }}>
       {children}
     </AuthContext.Provider>
   );
