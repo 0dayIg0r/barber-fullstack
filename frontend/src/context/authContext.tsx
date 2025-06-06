@@ -1,9 +1,16 @@
 // src/contexts/AuthContext.tsx
 
-import { destroyCookie, setCookie } from "nookies";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { api } from "../services/apiClient";
 import { navigateTo } from "./navigateTo";
+import { signOut } from "./signOut";
 
 interface SubscriptionsProps {
   id: string;
@@ -47,8 +54,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps | null>(null);
   const isAuthenticated = !!user;
 
+  useEffect(() => {
+    const { "@barber.token": token } = parseCookies();
+
+    if (token) {
+      api.get("/me").then((res) => {
+        const { id, name, address, email, subscriptions } = res.data;
+        setUser({
+          id,
+          name,
+          address,
+          email,
+          subscriptions,
+        });
+      })
+      .catch(()=>{
+        signOut()
+      })
+    }
+  }, []);
+
   async function signIn({ email, password }: SignInProps) {
-    console.log(email, password);
     try {
       const res = await api.post("/session", {
         email,
@@ -104,7 +130,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn, signUp, logoutUser }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, setUser, signIn, signUp, logoutUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
