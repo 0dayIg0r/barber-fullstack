@@ -1,3 +1,7 @@
+// src/contexts/AuthContext.tsx
+
+import { useRouter } from "next/router";
+import { destroyCookie } from "nookies";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface SubscriptionsProps {
@@ -20,8 +24,6 @@ interface AuthContextData {
   signIn: (credentials: SignInProps) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextData | undefined>(undefined);
-
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -31,16 +33,18 @@ interface SignInProps {
   password: string;
 }
 
-export function AuthProvider({ children }: AuthProviderProps )   {
+const AuthContext = createContext<AuthContextData | undefined>(undefined);
+
+export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps | null>(null);
   const isAuthenticated = !!user;
 
   async function signIn({ email, password }: SignInProps) {
-    console.log(email, password)
+    console.log(email, password);
+    // lógica de login aqui
   }
-
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, setUser, signIn, }}>
       {children}
     </AuthContext.Provider>
   );
@@ -49,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps )   {
 export function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth precisa ser usado com o AuthProvider");
   }
   return context;
 }
