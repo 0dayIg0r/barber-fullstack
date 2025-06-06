@@ -1,8 +1,9 @@
 // src/contexts/AuthContext.tsx
 
-import { destroyCookie, setCookie } from "nookies";
+import { setCookie } from "nookies";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../services/apiClient";
+import { navigateTo } from "./navigateTo";
 
 interface SubscriptionsProps {
   id: string;
@@ -50,7 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setCookie(undefined, "@barber.token", token, {
         maxAge: 60 * 60 * 24 * 30,
-        path:'/'
+        path: "/",
       });
 
       setUser({
@@ -59,11 +60,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         address,
         subscriptions,
-      })
+      });
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      navigateTo("/dashboard");
     } catch (e: any) {
-      throw new Error(e);
+      console.log(e.message);
     }
   }
   return (
