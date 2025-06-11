@@ -4,16 +4,18 @@ import { Flex, Text } from "@chakra-ui/react";
 import Head from "next/head";
 
 function Dashboard() {
+
   return (
     <>
       <Head>
-          <title>Barber NINJA - Minha Barbearia</title>
-        <Sidebar>
-          <Flex>
-            <Text>Bem vindo ao dashboard</Text>
-          </Flex>
-        </Sidebar>
+        <title>Barber NINJA - Minha Barbearia</title>
       </Head>
+
+      <Sidebar>
+        <Flex>
+          <Text>Bem vindo ao dashboard</Text>
+        </Flex>
+      </Sidebar>
     </>
   );
 }
