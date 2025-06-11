@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider, createSystem, defaultConfig } from "@chakra-ui/react";
 import { AuthProvider } from "../context/authContext";
+import "@fontsource/roboto/400.css";
 
 const theme = createSystem(defaultConfig, {
   theme: {
@@ -22,6 +23,10 @@ const theme = createSystem(defaultConfig, {
         },
         orangeToDark: {
           value: "linear-gradient(to bottom, #12131b 3%, #fba931 100%)",
+        },
+        fontFamily: {
+          body: { value: "Roboto, sans-serif" },
+          heading: { value: "Roboto, sans-serif" },
         },
       },
     },
