@@ -29,7 +29,7 @@ const linkItems: Array<LinkItemProps> = [
 export function Sidebar({ children }: { children: ReactNode }) {
   const { onOpen, onClose } = useDisclosure();
   return (
-    <Box minH={"100vh"} bg={"barber.900"} display="flex">
+    <Box minH={"100vh"} bg={"barber.900"} display="flex" fontFamily={"body"}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
