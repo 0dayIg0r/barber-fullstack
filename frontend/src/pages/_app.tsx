@@ -20,6 +20,9 @@ const theme = createSystem(defaultConfig, {
         orange: {
           900: { value: "#fba931" },
         },
+        orangeToDark: {
+          value: "linear-gradient(to bottom, #12131b 3%, #fba931 100%)",
+        },
       },
     },
   },
