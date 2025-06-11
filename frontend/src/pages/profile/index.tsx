@@ -19,9 +19,28 @@ interface ProfileProps {
   premium: boolean;
 }
 function Profile({ user, premium }: ProfileProps) {
- const [name, setName] = useState(user && user?.name)
- const [address, setAddress] = useState(user?.address === null ? 'Sem endereço, cadastre agora' : user?.address)
+  const [name, setName] = useState(user && user?.name);
+  const [address, setAddress] = useState(
+    user?.address === null ? "Sem endereço, cadastre agora" : user?.address
+  );
 
+  async function handleUpdate() {
+    if (name === "") {
+      return;
+    }
+
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.put("/users", {
+        name: name,
+        address: address,
+      });
+
+      location.reload();
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
   return (
     <>
       <Head>
@@ -30,7 +49,7 @@ function Profile({ user, premium }: ProfileProps) {
 
       <Sidebar>
         <Flex
-        fontFamily={'body'}
+          fontFamily={"body"}
           direction="column"
           align="flex-start"
           justify="flex-start"
@@ -96,7 +115,7 @@ function Profile({ user, premium }: ProfileProps) {
             <Input
               bg="gray.900"
               placeholder="Endereço da sua barbearia"
-              color={user?.address === null ?  'orange.500' : 'white'}
+              color={user?.address === null ? "orange.500" : "white"}
               _placeholder={{ color: "white" }}
               border="none"
               value={address}
@@ -130,7 +149,11 @@ function Profile({ user, premium }: ProfileProps) {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Text p={2} fontSize={"lg"} color={premium ? 'gray.500' : 'orange.500'}>
+              <Text
+                p={2}
+                fontSize={"lg"}
+                color={'green.600'}
+              >
                 {premium ? "Premium" : "Gratuito"}
               </Text>
               <Link href={"/planos"}>
@@ -140,11 +163,11 @@ function Profile({ user, premium }: ProfileProps) {
                   pl={2}
                   pr={3}
                   rounded={4}
-                  bg={"#00cd52"}
+                  bg={"green.600"}
                   color="white"
                   fontWeight={"bolder"}
                 >
-                  {premium ? 'Desativar' : 'Mudar plano'}
+                  {premium ? "Desativar" : "Mudar plano"}
                 </Box>
               </Link>
             </Flex>
@@ -158,6 +181,7 @@ function Profile({ user, premium }: ProfileProps) {
               borderColor={"white"}
               fontWeight={"bolder"}
               _hover={{ bg: "#ffb13e", borderColor: "#ffb13e" }}
+              onClick={handleUpdate}
             >
               Salvar
             </Button>
