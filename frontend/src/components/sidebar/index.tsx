@@ -1,19 +1,16 @@
 import { ReactNode } from "react";
 import {
-  IconButton,
   Box,
   CloseButton,
   Flex,
   Icon,
-  Drawer,
-  DrawerContent,
-  Text,
   useDisclosure,
   BoxProps,
   FlexProps,
+  Text,
 } from "@chakra-ui/react";
 
-import { FiScissors, FiClipboard, FiSettings, FiMenu } from "react-icons/fi";
+import { FiScissors, FiClipboard, FiSettings } from "react-icons/fi";
 import Link from "next/link";
 import { IconType } from "react-icons";
 
@@ -24,20 +21,22 @@ interface LinkItemProps {
 }
 
 const linkItems: Array<LinkItemProps> = [
-  { name: "agenda", icon: FiScissors, route: "/dashboard" },
-  { name: "cortes", icon: FiClipboard, route: "/haircuts" },
-  { name: "Minha conta", icon: FiSettings, route: "/profile" },
+  { name: "AGENDA", icon: FiScissors, route: "/dashboard" },
+  { name: "CORTES", icon: FiClipboard, route: "/haircuts" },
+  { name: "MINHA CONTA", icon: FiSettings, route: "/profile" },
 ];
 
 export function Sidebar({ children }: { children: ReactNode }) {
   const { onOpen, onClose } = useDisclosure();
   return (
-    <Box minH={"100vh"} bg={"barber.900"}>
+    <Box minH={"100vh"} bg={"barber.900"} display="flex">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
       />
-      <Box>{children}</Box>
+      <Box flex={1} p={4}>
+        {children}
+      </Box>
     </Box>
   );
 }
@@ -49,11 +48,11 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
-      bg={"barber.400"}
+      bg={"white"}
       borderRight={"1px"}
-      borderRightColor={"gray.200"}
+      borderRightColor={"gray.700"}
       w={{ base: "full", md: 60 }}
-      h={"full"}
+      h={"100vh"}
       {...rest}
     >
       <Flex
@@ -63,18 +62,34 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         mx={8}
       >
         <Link href={"/dashboard"} passHref>
+          <Flex
+            cursor={"pointer"}
+            userSelect={"none"}
+            flexDirection={"row"}
+          ></Flex>
+          <CloseButton
+            display={{ base: "flex", md: "none" }}
+            onClick={onClose}
+          />
+        </Link>
+      </Flex>
+      <Flex h={20} alignItems={"center"} justifyContent={"center"} mx={8}>
+        <Link href={"/dashboard"} passHref>
           <Flex cursor={"pointer"} userSelect={"none"} flexDirection={"row"}>
-            <Text fontSize={"2xl"} fontFamily={"monospace"} fontWeight={"bold"}>
+            <Text fontSize={"2xl"} fontFamily={"monospace"} fontWeight="bold">
               Barber
             </Text>
-            <Text fontSize={"2xl"} fontFamily={"monospace"} fontWeight={"bold"}>
+            <Text
+              fontSize={"2xl"}
+              fontFamily={"monospace"}
+              fontWeight="bold"
+              color={"orange"}
+            >
               NINJA
             </Text>
           </Flex>
         </Link>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-
       {linkItems.map((link) => (
         <NavItem icon={link.icon} route={link.route} key={link.name}>
           {link.name}
@@ -93,6 +108,7 @@ const NavItem = ({ icon, children, route, ...rest }: NavItemProps) => {
   return (
     <Link href={route} style={{ textDecoration: "none" }}>
       <Flex
+        fontWeight={"bold"}
         align={"center"}
         p={"4"}
         mx={"4"}
@@ -107,8 +123,9 @@ const NavItem = ({ icon, children, route, ...rest }: NavItemProps) => {
       >
         {icon && (
           <Icon
+            color={"orange"}
             mr={"4"}
-            fontSize={"16"}
+            fontSize={"2xl"}
             as={icon}
             _groupHover={{
               color: "white",
