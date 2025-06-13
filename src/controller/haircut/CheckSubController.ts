@@ -7,16 +7,19 @@ class CheckSubController {
 
 
     if (!user_id) {
-      return res.status(400).json({ error: "É necessário um usuário" });
+      res.status(400).json({ error: "É necessário um usuário" });
+      return 
     }
 
     const checkSub = new CheckSubService();
 
     try {
       const status = await checkSub.execute({ user_id });
-      return res.status(200).json(status);
+      res.status(200).json(status);
+      return 
     } catch (error) {
-      return res.status(500).json({ error: "Internal server error." });
+      res.status(500).json({ error: "Internal server error." });
+      return
     }
   }
 }

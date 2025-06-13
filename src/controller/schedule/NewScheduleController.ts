@@ -7,7 +7,8 @@ class NewScheduleController {
     const user_id = req.user_id;
 
     if (!haircut_id || !customer) {
-      return res.status(400).send({ error: "haircut_id e customer são obrigatórios." });
+      res.status(400).send({ error: "haircut_id e customer são obrigatórios." });
+      return 
     }
 
     const newSchedule = new NewScheduleService();
@@ -19,10 +20,12 @@ class NewScheduleController {
         customer,
       });
 
-      return res.status(201).send(schedule);
+      res.status(201).send(schedule);
+      return
     } catch (error) {
       
-      return res.status(500).send({ error: "Ocorreu um erro ao criar o agendamento." });
+      res.status(500).send({ error: "Ocorreu um erro ao criar o agendamento." });
+      return
     }
   }
 }

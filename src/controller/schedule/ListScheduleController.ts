@@ -6,17 +6,20 @@ class ListScheduleController {
     const user_id = req.user_id;
 
     if (!user_id) {
-      return res.status(400).json({ error: "O ID do usuário é obrigatório." });
+      res.status(400).json({ error: "O ID do usuário é obrigatório." });
+      return 
     }
 
     const listSchedule = new ListScheduleService();
     
     try {
       const schedule = await listSchedule.execute({ user_id });
-      return res.status(200).json(schedule);
+      res.status(200).json(schedule);
+      return
     } catch (error) {
 
-      return res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ error: "Erro interno do servidor." });
+      return
     }
   }
 }

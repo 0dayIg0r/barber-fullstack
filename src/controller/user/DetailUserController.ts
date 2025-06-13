@@ -6,7 +6,8 @@ class UserDetailController {
     const user_id = req.user_id;
 
     if (!user_id) {
-      return res.status(400).json({ error: "ID do usuário não fornecido." });
+      res.status(400).json({ error: "ID do usuário não fornecido." });
+      return 
     }
 
     const userDetailService = new UserDetailService();
@@ -15,15 +16,18 @@ class UserDetailController {
       const detailUser = await userDetailService.execute({ user_id });
 
       if (!detailUser) {
-        return res.status(404).json({ error: "Usuário não encontrado." });
+        res.status(404).json({ error: "Usuário não encontrado." });
+        return
       }
 
-      return res.status(200).json(detailUser);
+      res.status(200).json(detailUser);
+      return 
     } catch (error) {
       error;
-      return res
-        .status(500)
-        .json({ error: "Erro ao buscar detalhes do usuário." });
+      res
+      .status(500)
+      .json({ error: "Erro ao buscar detalhes do usuário." });
+      return
     }
   }
 }

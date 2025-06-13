@@ -6,9 +6,9 @@ class UpdateHaircutController {
     const user_id = req.user_id;
     const { name, price, status, haircut_id } = req.body;
 
-    // Validação dos dados
     if (!user_id || !haircut_id) {
-      return res.status(400).json({ error: "O ID do usuário e o ID do corte de cabelo são obrigatórios." });
+      res.status(400).json({ error: "O ID do usuário e o ID do corte de cabelo são obrigatórios." });
+      return
     }
 
     const updateHaircut = new UpdateHairCutService();
@@ -21,10 +21,12 @@ class UpdateHaircutController {
         status,
         haircut_id,
       });
-      return res.status(200).json(haircut);
+      res.status(200).json(haircut);
+      return
     } catch (error) {
   
-      return res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ error: "Erro interno do servidor." });
+      return
     }
   }
 }

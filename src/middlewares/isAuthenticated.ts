@@ -13,7 +13,8 @@ export function isAuthenticated(
   const authToken = req.headers.authorization;
 
   if (!authToken) {
-    return res.status(401).json({ error: "Token de autenticação não fornecido." });
+    res.status(401).json({ error: "Token de autenticação não fornecido." });
+    return
   }
 
   const [, token] = authToken.split(" ");
@@ -25,6 +26,7 @@ export function isAuthenticated(
     return next();
   } catch (err) {
   
-    return res.status(401).json({ error: "Token de autenticação inválido." });
+    res.status(401).json({ error: "Token de autenticação inválido." });
+    return 
   }
 }

@@ -16,7 +16,6 @@ import { FinishScheduleController } from "./controller/schedule/FinishScheduleCo
 const router = Router();
 
 // ROTAS USER
-router.post("/users", new CreateUserController().handle);
 router.post("/session", new AuthUserController().handle);
 router.get("/me", isAuthenticated, new UserDetailController().handle);
 router.put("/users", isAuthenticated, new UpdateUserController().handle);
@@ -35,6 +34,10 @@ router.get(
 //ROTAS SERVIÇO
 router.post("/schedule", isAuthenticated, new NewScheduleController().handle);
 router.get("/schedule", isAuthenticated, new ListScheduleController().handle);
-router.delete("/schedule", isAuthenticated, new FinishScheduleController().handle);
+router.delete(
+  "/schedule",
+  isAuthenticated,
+  new FinishScheduleController().handle
+);
 
 export { router };

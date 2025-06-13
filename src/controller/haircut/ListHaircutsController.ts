@@ -6,9 +6,9 @@ class ListHaircutController {
     const user_id = req.user_id;
     const status = req.query.status as string;
 
-    
     if (!user_id) {
-      return res.status(400).json({ error: "O ID do usuário é obrigatório." });
+      res.status(400).json({ error: "O ID do usuário é obrigatório." });
+      return;
     }
 
     const listHaircuts = new ListHaircutService();
@@ -18,9 +18,11 @@ class ListHaircutController {
         user_id,
         status,
       });
-      return res.status(200).json(haircuts);
+      res.status(200).json(haircuts);
+      return;
     } catch (error) {
-      return res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ error: "Erro interno do servidor." });
+      return;
     }
   }
 }

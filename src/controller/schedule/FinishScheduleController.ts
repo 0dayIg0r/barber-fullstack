@@ -6,9 +6,13 @@ class FinishScheduleController {
     const user_id = req.user_id;
     const schedule_id = req.query.schedule_id as string;
 
-    
     if (!user_id || !schedule_id) {
-      return res.status(400).json({ error: "O ID do usuário e o ID do agendamento são obrigatórios." });
+      res
+        .status(400)
+        .json({
+          error: "O ID do usuário e o ID do agendamento são obrigatórios.",
+        });
+      return;
     }
 
     const finishSchedule = new FinishScheduleService();
@@ -18,10 +22,11 @@ class FinishScheduleController {
         user_id,
         schedule_id,
       });
-      return res.status(200).json(schedule);
+      res.status(200).json(schedule);
+      return;
     } catch (error) {
-  
-      return res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ error: "Erro interno do servidor." });
+      return;
     }
   }
 }

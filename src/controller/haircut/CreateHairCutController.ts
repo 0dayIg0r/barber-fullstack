@@ -7,7 +7,8 @@ class CreateHaircutController {
     const user_id = req.user_id;
 
     if (!name || !price || !user_id) {
-      return res.status(400).json({ error:"Preencha os campos completamente, nome, preço e id de usuário" });
+      res.status(400).json({ error:"Preencha os campos completamente, nome, preço e id de usuário" });
+      return 
     }
 
     const haircutService = new CreateHaircutService();
@@ -18,10 +19,12 @@ class CreateHaircutController {
         price,
         user_id,
       });
-      return res.status(201).json(haircut);
+      res.status(201).json(haircut);
+      return
     } catch (error) {
 
-      return res.status(500).json({ error: "Internal server error." });
+      res.status(500).json({ error: "Internal server error." });
+      return 
     }
   }
 }
