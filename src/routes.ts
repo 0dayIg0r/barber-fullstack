@@ -18,6 +18,7 @@ const router = Router();
 // ROTAS USER
 router.post("/session", new AuthUserController().handle);
 router.get("/me", isAuthenticated, new UserDetailController().handle);
+router.post('/users', isAuthenticated, new CreateUserController().handle)
 router.put("/users", isAuthenticated, new UpdateUserController().handle);
 
 //ROTAS CORTE DE CABELO

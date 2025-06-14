@@ -7,9 +7,8 @@ class CreateUserController {
 
     // Validação básica dos dados obrigatórios
     if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Nome, email e senha são obrigatórios." });
+      res.status(400).json({ error: "Nome, email e senha são obrigatórios." });
+      return;
     }
 
     const createUserService = new CreateUserService();
@@ -21,17 +20,19 @@ class CreateUserController {
         password,
       });
 
-      return res.status(201).json(user);
+      res.status(201).json(user);
+      return;
     } catch (error: any) {
-    
       if (
         error.message.includes("duplicate") ||
         error.message.includes("already exists")
       ) {
-        return res.status(409).json({ error: "Este email já está em uso." });
+        res.status(409).json({ error: "Este email já está em uso." });
+        return;
       }
 
-      return res.status(500).json({ error: "Erro ao criar usuário." });
+      res.status(500).json({ error: "Erro ao criar usuário." });
+      return;
     }
   }
 }
