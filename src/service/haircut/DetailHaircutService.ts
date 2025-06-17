@@ -10,6 +10,7 @@ class DetailHaircutService {
       where: {
         id: haircut_id,
       },
+  
     });
 
     return haircut;

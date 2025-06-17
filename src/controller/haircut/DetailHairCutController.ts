@@ -8,7 +8,7 @@ class DetailHaircutController {
 
     const detailHaircut = new DetailHaircutService();
 
-    const detail = detailHaircut.execute({
+    const detail = await detailHaircut.execute({
       haircut_id,
     });
 
