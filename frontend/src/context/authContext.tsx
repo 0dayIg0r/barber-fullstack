@@ -99,7 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       navigateTo("/dashboard");
     } catch (e: any) {
-      console.log(e.message);
+   throw new Error(e)
     }
   }
 
@@ -113,6 +113,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       navigateTo("/login");
     } catch (e: any) {
+  
       throw new Error(e.message);
     }
   }

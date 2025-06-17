@@ -1,4 +1,6 @@
 import { Sidebar } from "@/src/components/sidebar";
+import { setupAPIClient } from "@/src/services/api";
+import { canSSRAuth } from "@/src/utils/canSSRAuth";
 import {
   Box,
   Button,
@@ -10,22 +12,37 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import Head from "next/head";
+import Link from "next/link";
 import React, { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 
-function NewHaircut() {
+interface NewHaircutProps {
+  subscription: boolean;
+  count: number;
+}
+
+export default function NewHaircut({ subscription, count }: NewHaircutProps) {
+  console.log("SUBSCRIPTION:", subscription);
+  console.log("COUNT:", count);
   const [isMobile] = useMediaQuery(["(max-width: 500px)"]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
 
-  const handleSubmit = () => {
-    if (!name || !price) {
-      alert("Preencha todos os campos!");
+  async function handleRegister() {
+    if (name === "" || price === "") {
       return;
     }
-    console.log({ name, price });
-    // Envio para backend ou tratamento
-  };
+
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.post("/haircut", {
+        name: name,
+        price: Number(price),
+      });
+    } catch (err) {
+      alert("Erro ao cadastrar esse modelo.");
+    }
+  }
 
   return (
     <>
@@ -47,7 +64,7 @@ function NewHaircut() {
 
           <Box as="form" w="100%" maxW="500px">
             <Stack>
-              <Text fontWeight={"bold"} color={"orange.900"}>
+              <Text fontWeight={"bold"} color={"white"}>
                 Nome do corte
               </Text>
               <Input
@@ -56,7 +73,7 @@ function NewHaircut() {
                 onChange={(e) => setName(e.target.value)}
                 bg="white"
               />
-              <Text fontWeight={"bold"} color={"orange.900"}>
+              <Text fontWeight={"bold"} color={"white"}>
                 Preço
               </Text>
               <Input
@@ -67,7 +84,7 @@ function NewHaircut() {
                 bg="white"
               />
               <Button
-                onClick={handleSubmit}
+                onClick={handleRegister}
                 backgroundColor={"orange.900"}
                 mt={5}
                 fontWeight={"bold"}
@@ -78,10 +95,47 @@ function NewHaircut() {
               </Button>
             </Stack>
           </Box>
+
+          {!subscription && count >= 3 && (
+            <Link href="/plans" passHref>
+              <Text color="red.500" fontWeight="bold" cursor="pointer">
+                Seja premium
+              </Text>
+            </Link>
+          )}
+
+          {subscription && (
+            <Text color="green.500" fontWeight="bold">
+              Parabéns, você é nosso usuário premium
+            </Text>
+          )}
         </Flex>
       </Sidebar>
     </>
   );
 }
 
-export default NewHaircut;
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  try {
+    const apiClient = setupAPIClient(ctx);
+    const res = await apiClient.get("/haircut/check");
+    const count = await apiClient.get("/haircut/count");
+
+    return {
+      props: {
+        subscription:
+          res.data?.subscriptions?.status === "active" ? true : false,
+        count: count.data.count,
+      },
+    };
+  } catch (e) {
+    console.log(e.message);
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+});
+// CORRIGIR API DO COUNT

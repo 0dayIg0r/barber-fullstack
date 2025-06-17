@@ -104,7 +104,6 @@ export default function Register() {
           <Center>
             <Link href="/login" passHref>
               <Text
-                as="a"
                 cursor="pointer"
                 color="#fff"
                 _hover={{ color: "barber.100" }}
