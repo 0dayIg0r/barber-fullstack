@@ -46,6 +46,9 @@ function New({ haircuts }: NewProps) {
   }
 
   async function handleSchedule() {
+    if(customer ===''){
+        alert('preencha o nome do cliente')
+    }
     try {
       const apiClient = setupAPIClient();
       await apiClient.post("schedule",{
