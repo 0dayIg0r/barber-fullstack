@@ -183,7 +183,7 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
   try {
     const apiClient = setupAPIClient(ctx);
     const check = await apiClient.get("/haircut/check");
-    console.log(check.data.subscriptions.status);
+  
 
     const res = await apiClient.get("/haircut/detail", {
       params: {
