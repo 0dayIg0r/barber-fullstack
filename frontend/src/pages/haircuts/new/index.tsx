@@ -22,8 +22,7 @@ interface NewHaircutProps {
 }
 
 export default function NewHaircut({ subscription, count }: NewHaircutProps) {
-  console.log("SUBSCRIPTION:", subscription);
-  console.log("COUNT:", count);
+  
   const [isMobile] = useMediaQuery(["(max-width: 500px)"]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -138,4 +137,3 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     };
   }
 });
-// CORRIGIR API DO COUNT

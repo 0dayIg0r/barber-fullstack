@@ -71,7 +71,6 @@ function Haircuts({ haircuts }: HaircutsProps) {
 
       <Sidebar>
         <Box w="100%" p={4}>
-         
           <Flex
             direction={isMobile ? "column" : "row"}
             align={isMobile ? "flex-start" : "center"}
@@ -95,36 +94,11 @@ function Haircuts({ haircuts }: HaircutsProps) {
           </Flex>
 
           <Stack>
-  
             <Flex>
               <Button onClick={handleDisabled}>
                 Ver cortes {disable === "enabled" ? "ativos" : "desativados"}
               </Button>
             </Flex>
-          </Stack>
-
-         
-          <Stack>
-            <Link href="/haircuts/123">
-              <Box
-                bg="barber.400"
-                p={4}
-                borderRadius="md"
-                cursor="pointer"
-                _hover={{ bg: "barber.500" }}
-                transition="0.2s"
-              >
-                <Flex align="center" mb={2}>
-                  <Box as={IoMdPricetag} color="white" boxSize={6} mr={2} />
-                  <Text fontSize="lg" fontWeight="semibold" color="white">
-                    Corte completo
-                  </Text>
-                </Flex>
-                <Text fontSize="sm" color="white">
-                  Preço: R$ 59,90
-                </Text>
-              </Box>
-            </Link>
           </Stack>
 
           {haircutList.map((haircut) => (
@@ -162,7 +136,6 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
         status: true,
       },
     });
-   
 
     if (res.data === null) {
       return {
@@ -186,7 +159,5 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     };
   }
 });
-
-
 
 export default Haircuts;

@@ -1,15 +1,83 @@
 import { Sidebar } from "@/src/components/sidebar";
-import { Button, Flex, Heading, Input, useMediaQuery } from "@chakra-ui/react";
+import { setupAPIClient } from "@/src/services/api";
+import { canSSRAuth } from "@/src/utils/canSSRAuth";
+import {
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 
-export default function EditHaircut() {
-  const [isMobile] = useMediaQuery(["max-width: 500px"]);
-  const [disable, setDisable] = useState("enabled");
+interface HaircutProps {
+  id: string;
+  name: string;
+  price: number | string;
+  status: boolean;
+  user_id: string;
+}
 
-  async function handleDisabled() {}
+interface SubscriptionsProps {
+  id: string;
+  status: string | boolean;
+}
+
+interface EditHairCutProps {
+  haircut: HaircutProps;
+  subscription: SubscriptionsProps | null;
+}
+
+export default function EditHaircut({
+  subscription,
+  haircut,
+}: EditHairCutProps) {
+  const [isMobile] = useMediaQuery(["max-width: 500px"]);
+  const [disable, setDisable] = useState(
+    haircut?.status ? "disabled" : "enabled"
+  );
+
+  const [name, setName] = useState(haircut?.name);
+  const [price, setPrice] = useState(haircut?.price);
+  const [status, setStatus] = useState(haircut?.status);
+
+  function handleDisable() {
+    if (disable === "disabled") {
+      setDisable("enable");
+      setStatus(false);
+    } else {
+      setDisable("disable");
+      setStatus(true);
+    }
+  }
+
+  async function handleUpdate() {
+    if (name === "" || price === "") {
+      return;
+    }
+
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.put("/haircut", {
+        name,
+        price: Number(price),
+        status,
+        haircut_id: haircut?.id,
+      });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+
+      alert("Informações alteradas.");
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
   return (
     <>
       <Head>
@@ -65,6 +133,8 @@ export default function EditHaircut() {
                   type="text"
                   w={"100%"}
                   color={"white"}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
                 <Input
                   placeholder="Valor ex: 99,99"
@@ -73,9 +143,31 @@ export default function EditHaircut() {
                   type="number"
                   w={"100%"}
                   color={"white"}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
-                <Button onClick={handleDisabled} mb={5}>Desativar</Button>
-                <Button onClick={handleDisabled}>Salvar</Button>
+                <Button
+                  mb={5}
+                  color={status ? "red.700" : "green.700"}
+                  onClick={() => setStatus(!status)}
+                >
+                  {status ? "Desativar" : "Ativar"}
+                </Button>
+                <Button
+                  disabled={subscription?.status !== "active"}
+                  onClick={handleUpdate}
+                >
+                  Salvar
+                </Button>
+                {subscription?.status !== "active" && (
+                  <Flex direction={"row"} align={"center"} justify={"center"}>
+                    <Link href={"/plans"}>
+                      <Text fontWeight={"bold"} mr={1} color={"#31fb6a"} mt={5}>
+                        Seja premium e tenha todos acessos liberados
+                      </Text>
+                    </Link>
+                  </Flex>
+                )}
               </Flex>
             </Flex>
           </Flex>
@@ -85,4 +177,32 @@ export default function EditHaircut() {
   );
 }
 
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  const { id } = ctx.params;
 
+  try {
+    const apiClient = setupAPIClient(ctx);
+    const check = await apiClient.get("/haircut/check");
+    console.log(check.data.subscriptions.status);
+
+    const res = await apiClient.get("/haircut/detail", {
+      params: {
+        haircut_id: id,
+      },
+    });
+
+    return {
+      props: {
+        haircut: res.data,
+        subscription: check.data?.subscriptions,
+      },
+    };
+  } catch (e) {
+    return {
+      redirect: {
+        destination: "/haircuts",
+        permanent: false,
+      },
+    };
+  }
+});
