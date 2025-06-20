@@ -31,6 +31,22 @@ interface DashboardProps {
 
 export default function Dashboard({ schedule }: DashboardProps) {
   const [list, setList] = useState(schedule);
+  const [service, setService] = useState<ScheduleItem>();
+
+  async function handleFinish(id: string) {
+    try {
+      const apiClient = setupAPIClient();
+      await apiClient.delete("/schedule", {
+        params: {
+          schedule_id: id,
+        },
+      });
+      setList(list.filter((item) => item.id !== id));
+      alert("Finalizado");
+    } catch (e) {
+      alert(e.message);
+    }
+  }
 
   return (
     <>
@@ -102,48 +118,58 @@ export default function Dashboard({ schedule }: DashboardProps) {
 
                 {/* Schedule Items (compact) */}
                 {list.map((item) => (
-                  <ChakraLink
-                    key={item.id}
-                    w="100%"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Flex
-                      w="100%"
-                      direction="row"
-                      p={2}
-                      rounded="md"
-                      bg="barber.600"
-                      _hover={{ bg: "barber.550" }}
-                      align="center"
-                      fontSize="sm"
-                    >
-                      <Flex width="50%" align="center" pl={2}>
-                        <IoMdPerson size={16} color="#f1f1f1" />
-                        <Text ml={2} color="white">
-                          {item.customer}
+                  <Flex key={item.id} w="100%" direction="column" gap={1}>
+                    <ChakraLink w="100%" style={{ textDecoration: "none" }}>
+                      <Flex
+                        w="100%"
+                        direction="row"
+                        p={2}
+                        rounded="md"
+                        bg="barber.600"
+                        _hover={{ bg: "barber.550" }}
+                        align="center"
+                        fontSize="sm"
+                      >
+                        <Flex width="50%" align="center" pl={2}>
+                          <IoMdPerson size={16} color="#f1f1f1" />
+                          <Text ml={2} color="white">
+                            {item.customer}
+                          </Text>
+                        </Flex>
+
+                        <Text width="30%" color="white">
+                          {item.haircut.name}
+                        </Text>
+
+                        <Text
+                          width="20%"
+                          color="white"
+                          textAlign="right"
+                          pr={2}
+                          fontWeight="semibold"
+                        >
+                          {typeof item.haircut.price === "number"
+                            ? new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                              }).format(item.haircut.price)
+                            : item.haircut.price}
                         </Text>
                       </Flex>
-
-                      <Text width="30%" color="white">
-                        {item.haircut.name}
-                      </Text>
-
-                      <Text
-                        width="20%"
-                        color="white"
-                        textAlign="right"
-                        pr={2}
-                        fontWeight="semibold"
-                      >
-                        {typeof item.haircut.price === "number"
-                          ? new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(item.haircut.price)
-                          : item.haircut.price}
-                      </Text>
-                    </Flex>
-                  </ChakraLink>
+                    </ChakraLink>
+                    <Button
+                      bg="green.600"
+                      fontWeight={"bold"}
+                      color="white"
+                      _hover={{ bg: "green.700" }}
+                      size="sm"
+                      alignSelf="flex-end"
+                      w="100px"
+                      onClick={() => handleFinish(item.id)}
+                    >
+                      Finalizar
+                    </Button>
+                  </Flex>
                 ))}
               </>
             ) : (
@@ -178,7 +204,6 @@ export default function Dashboard({ schedule }: DashboardProps) {
     </>
   );
 }
-
 export const getServerSideProps = canSSRAuth(async (ctx) => {
   try {
     const apiClient = setupAPIClient(ctx);
