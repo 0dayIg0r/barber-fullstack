@@ -1,5 +1,6 @@
 import { Sidebar } from "@/src/components/sidebar";
 import { setupAPIClient } from "@/src/services/api";
+import { getStripeJs } from "@/src/services/stripe-ts";
 import { canSSRAuth } from "@/src/utils/canSSRAuth";
 import { Button, Flex, Heading, Text, useMediaQuery } from "@chakra-ui/react";
 import Head from "next/head";
@@ -11,6 +12,26 @@ interface PlansProps {
 
 function Plans({ premium }: PlansProps) {
   const [isMobile] = useMediaQuery(["max-width: 500px"]);
+
+  const handleSubscription = async () => {
+    if (premium) {
+      return;
+    }
+
+    try {
+      const apiClient = setupAPIClient();
+
+      const res = await apiClient.post("/subscribe");
+
+      const { sessionId } = res.data;
+      console.log(res.data);
+
+      const stripe = await getStripeJs();
+      await stripe.redirectToCheckout({ sessionId: sessionId });
+    } catch (e) {
+      alert(e.message);
+    }
+  };
 
   return (
     <>
@@ -121,14 +142,21 @@ function Plans({ premium }: PlansProps) {
                 _hover={{ bg: "orange.700" }}
                 alignSelf="center"
                 px={8}
+                onClick={handleSubscription}
+                disabled={premium}
               >
                 {premium
                   ? "VOCÊ É JÁ É NOSSO ASSINANTE"
                   : "FAZER UMA ASSINATURA"}
               </Button>
               {premium && (
-                <Flex justify={"center"} align={"center"} _hover={{ color: "orange.600" }} cursor={"pointer"}>
-                  <Text >Alterar assinatura</Text>
+                <Flex
+                  justify={"center"}
+                  align={"center"}
+                  _hover={{ color: "orange.600" }}
+                  cursor={"pointer"}
+                >
+                  <Text>Alterar assinatura</Text>
                 </Flex>
               )}
             </Flex>
@@ -145,9 +173,12 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
   try {
     const res = await apiClient.get("/me");
 
+    const isPremium =
+      res.data?.subscriptions?.status === "active" ? true : false;
+
     return {
       props: {
-        premium: res.data?.subscriptions.status === "active" ? true : false,
+        premium: isPremium,
       },
     };
   } catch (error) {
@@ -161,4 +192,5 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     };
   }
 });
+
 export default Plans;
