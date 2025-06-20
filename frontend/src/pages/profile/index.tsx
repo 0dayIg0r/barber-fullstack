@@ -156,7 +156,7 @@ function Profile({ user, premium }: ProfileProps) {
               >
                 {premium ? "Premium" : "Gratuito"}
               </Text>
-              <Link href={"/planos"}>
+              <Link href={"/plans"}>
                 <Box
                   cursor="pointer"
                   p={1}
