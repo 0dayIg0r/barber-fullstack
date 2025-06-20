@@ -6,10 +6,9 @@ class SubscribeController {
     const user_id = req.user_id;
 
     const subscribeService = new SubscribeService();
-    const subscribe = subscribeService.execute({ user_id });
+    const result = await subscribeService.execute({ user_id });
 
-    res.status(201).send(user_id)
-    return
+    return res.status(201).json(result);
   }
 }
 export { SubscribeController };
