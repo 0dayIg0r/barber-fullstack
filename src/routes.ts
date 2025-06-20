@@ -14,6 +14,7 @@ import { NewScheduleController } from "./controller/schedule/NewScheduleControll
 import { ListScheduleController } from "./controller/schedule/ListScheduleController";
 import { FinishScheduleController } from "./controller/schedule/FinishScheduleController";
 import { CountHairCutsController } from "./controller/haircut/CountHaircutController";
+import { SubscribeController } from "./controller/subscribe/SubscribeController";
 const router = Router();
 
 // ROTAS USER
@@ -42,5 +43,9 @@ router.delete(
   isAuthenticated,
   new FinishScheduleController().handle
 );
+
+
+// ROTA DE PAGAMENTO
+router.post('/subscribe', isAuthenticated, new SubscribeController().handle)
 
 export { router };
