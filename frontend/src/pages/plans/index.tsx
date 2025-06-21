@@ -29,7 +29,7 @@ function Plans({ premium }: PlansProps) {
       const stripe = await getStripeJs();
       await stripe.redirectToCheckout({ sessionId: sessionId });
     } catch (e) {
-      alert(e.message);
+      console.log(e.message);
     }
   };
 
