@@ -1,4 +1,5 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import bodyParser from "body-parser";
 import CreateUserController from "./controller/user/CreateUserController";
 import { AuthUserController } from "./controller/user/AuthUserController";
 import { UserDetailController } from "./controller/user/DetailUserController";
@@ -15,12 +16,22 @@ import { ListScheduleController } from "./controller/schedule/ListScheduleContro
 import { FinishScheduleController } from "./controller/schedule/FinishScheduleController";
 import { CountHairCutsController } from "./controller/haircut/CountHaircutController";
 import { SubscribeController } from "./controller/subscribe/SubscribeController";
+import { WebHookController } from "./controller/subscribe/WebHookController";
+
 const router = Router();
+
+// ROTA DE PAGAMENTO
+router.post("/subscribe", isAuthenticated, new SubscribeController().handle);
+router.post(
+  "/webhooks",
+  bodyParser.raw({ type: "application/json" }),
+  new WebHookController().handle
+);
 
 // ROTAS USER
 router.post("/session", new AuthUserController().handle);
 router.get("/me", isAuthenticated, new UserDetailController().handle);
-router.post('/users', new CreateUserController().handle)
+router.post("/users", new CreateUserController().handle);
 router.put("/users", isAuthenticated, new UpdateUserController().handle);
 
 //ROTAS CORTE DE CABELO
@@ -28,7 +39,11 @@ router.post("/haircut", isAuthenticated, new CreateHaircutController().handle);
 router.get("/haircut", isAuthenticated, new ListHaircutController().handle);
 router.put("/haircut", isAuthenticated, new UpdateHaircutController().handle);
 router.get("/haircut/check", isAuthenticated, new CheckSubController().handle);
-router.get("/haircut/count", isAuthenticated, new CountHairCutsController().handle);
+router.get(
+  "/haircut/count",
+  isAuthenticated,
+  new CountHairCutsController().handle
+);
 router.get(
   "/haircut/detail",
   isAuthenticated,
@@ -43,9 +58,5 @@ router.delete(
   isAuthenticated,
   new FinishScheduleController().handle
 );
-
-
-// ROTA DE PAGAMENTO
-router.post('/subscribe', isAuthenticated, new SubscribeController().handle)
 
 export { router };

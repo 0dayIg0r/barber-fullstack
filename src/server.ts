@@ -2,15 +2,23 @@ import express, { Request, Response, NextFunction } from "express";
 import { router } from "./routes";
 import cors from "cors";
 import dotenv from "dotenv";
+import { WebHookController } from "./controller/subscribe/WebHookController";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
 const app = express();
 
-app.use(express.json());
 app.use(cors());
 
-// Rotas
+// COLOCAR AQUI POR CONTA DO CORS
+app.post(
+  "/webhooks",
+  bodyParser.raw({ type: "application/json" }),
+  new WebHookController().handle
+);
+
+app.use(express.json());
 app.use(router);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

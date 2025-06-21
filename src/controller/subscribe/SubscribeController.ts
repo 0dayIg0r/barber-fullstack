@@ -8,7 +8,8 @@ class SubscribeController {
     const subscribeService = new SubscribeService();
     const result = await subscribeService.execute({ user_id });
 
-    return res.status(201).json(result);
+    res.status(201).json(result);
+    return 
   }
 }
 export { SubscribeController };
