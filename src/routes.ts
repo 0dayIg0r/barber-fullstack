@@ -17,16 +17,10 @@ import { FinishScheduleController } from "./controller/schedule/FinishScheduleCo
 import { CountHairCutsController } from "./controller/haircut/CountHaircutController";
 import { SubscribeController } from "./controller/subscribe/SubscribeController";
 import { WebHookController } from "./controller/subscribe/WebHookController";
+import { CreatePortalController } from "./controller/subscribe/CreatePortalController";
 
 const router = Router();
 
-// ROTA DE PAGAMENTO
-router.post("/subscribe", isAuthenticated, new SubscribeController().handle);
-router.post(
-  "/webhooks",
-  bodyParser.raw({ type: "application/json" }),
-  new WebHookController().handle
-);
 
 // ROTAS USER
 router.post("/session", new AuthUserController().handle);
@@ -58,5 +52,12 @@ router.delete(
   isAuthenticated,
   new FinishScheduleController().handle
 );
-
+// ROTA DE PAGAMENTO
+router.post("/subscribe", isAuthenticated, new SubscribeController().handle);
+router.post(
+  "/webhooks",
+  bodyParser.raw({ type: "application/json" }),
+  new WebHookController().handle
+);
+router.post('/create-portal', isAuthenticated, new CreatePortalController().handle)
 export { router };

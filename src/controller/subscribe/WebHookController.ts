@@ -19,7 +19,6 @@ export class WebHookController {
         process.env.STRIPE_WEBHOOK_SECRET as string,
       );
     } catch (err: any) {
-      console.error("❌ Erro ao validar assinatura:", err.message);
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
@@ -62,8 +61,7 @@ export class WebHookController {
               "Customer:",
               session.customer
             );
-            // Decide se você quer retornar um erro 400 ou apenas um 200 nesses casos
-            // Por enquanto, vamos permitir que continue, mas o log é crucial
+            
           }
           break;
         }
@@ -86,8 +84,7 @@ export class WebHookController {
 
       res.status(200).send();
       return;
-    } catch (error: any) { // Adicionado 'any' para acessar error.message
-      console.error("❌ Erro interno ao processar webhook:", error.message || error); // Log mais detalhado
+    } catch (error: any) { 
       res.status(500).send("Erro interno ao processar webhook");
       return;
     }

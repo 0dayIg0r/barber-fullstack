@@ -11,6 +11,14 @@ const app = express();
 
 app.use(cors());
 
+app.use((req:Request, res, next)=>{
+  if(req.originalUrl === '/webhooks'){
+    next()
+  } else{
+    express.json()(req,res,next)
+  }
+})
+
 // COLOCAR AQUI POR CONTA DO CORS
 app.post(
   "/webhooks",
